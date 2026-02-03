@@ -8,35 +8,46 @@ class BasePage:
     Base class for all pages in Page Object pattern.
     """
 
-    def __init__(self, driver: WebDriver, path: str, timeout: int = 30000):
+    # Default timeouts (can be overridden in child classes)
+    action_timeout: int = 30000  # Timeout for actions (click, fill, etc.)
+    navigation_timeout: int = 30000  # Timeout for navigation (goto)
+    expect_timeout: int = 5000  # Timeout for expect assertions
+
+    def __init__(self, driver: WebDriver, path: str):
         """
         Initialize base page.
 
         Args:
             driver: WebDriver instance (wrapper over playwright)
             path: Page path that will be appended to base_url
-            timeout: Wait timeout in milliseconds (default 30 seconds)
         """
         self.driver = driver
         self.path = path
         self.url = self.driver.base_url + path
-        self.timeout = timeout
-        self._page: Optional[Page] = driver.page
+
+        # Apply timeouts if page already exists
+        self._apply_timeouts()
+
+    def _apply_timeouts(self):
+        """Apply default timeouts to current page"""
+        if self.driver.page:
+            self.driver.page.set_default_timeout(self.action_timeout)
+            self.driver.page.set_default_navigation_timeout(self.navigation_timeout)
 
     @property
     def page(self) -> Optional[Page]:
-        """Get playwright page object"""
-        return self._page
+        """Get current page from driver"""
+        return self.driver.page
 
     def wait_for_load_state(self, state: str = "load", **kwargs):
         """Wait for page load state"""
-        if self._page:
-            self._page.wait_for_load_state(state, timeout=self.timeout, **kwargs)
+        if self.page:
+            self.page.wait_for_load_state(state, **kwargs)
 
     def get_url(self) -> str:
         """Get current URL"""
-        if self._page:
-            return self._page.url
+        if self.page:
+            return self.page.url
         return ""
 
     def goto(self, **kwargs):
@@ -46,8 +57,11 @@ class BasePage:
         Args:
             **kwargs: Additional parameters for page.goto() (wait_until, timeout, etc.)
         """
-        if self._page:
-            self._page.goto(self.url, **kwargs)
+        # Apply timeouts before navigation (ensures timeouts for new page)
+        self._apply_timeouts()
+
+        if self.page:
+            self.page.goto(self.url, **kwargs)
             self.wait_for_load_state()
 
     def __enter__(self):

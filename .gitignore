@@ -39,6 +39,10 @@ playwright-report/
 test-results/
 playwright/.cache/
 
+# Storage (generated auth state)
+storage/*
+!storage/.gitkeep
+
 # Environment variables
 .env
 .env.local
@@ -51,7 +55,8 @@ playwright/.cache/
 *.ipr
 
 # IDE - VSCode
-.vscode/
+.vscode/*
+!.vscode/launch.json
 *.code-workspace
 
 # Editor backup files
