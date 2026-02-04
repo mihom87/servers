@@ -40,22 +40,20 @@ def driver(request):
             if not STORAGE_FILE.exists():
                 try:
                     # Create temporary context to generate storage
-                    web_driver.new_context()
+                    web_driver.new_context(viewport={"width": 1920, "height": 1080})
                     web_driver.new_page()
 
-                    # Open non-existent page to minimize side-effects
-                    # Cookie popup appears on all pages including 404
-                    web_driver.goto("/404")
+                    # Open base URL (will redirect to /login if not authenticated)
+                    web_driver.goto("/")
                     web_driver.page.wait_for_load_state("load")
 
-                    # Wait for cookie popup to appear and be visible
-                    popup_locator = web_driver.page.locator("div.cky-consent-bar")
-                    expect(popup_locator).to_be_visible(timeout=10000)
+                    # Wait for cookie consent button to appear and be visible
+                    accept_button = web_driver.page.locator(
+                        "#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll"
+                    )
+                    expect(accept_button).to_be_visible(timeout=10000)
 
                     # Click Accept button (automatically waits for clickable state)
-                    accept_button = web_driver.page.locator(
-                        'div.cky-consent-bar button[aria-label="Accept"]'
-                    )
                     accept_button.click()
 
                     # Wait for cookies to be set
@@ -80,7 +78,10 @@ def driver(request):
         raise RuntimeError(f"Failed to create storage: {e}") from e
 
     # === CREATE MAIN CONTEXT WITH STORAGE ===
-    web_driver.new_context(storage_state=str(STORAGE_FILE))
+    web_driver.new_context(
+        storage_state=str(STORAGE_FILE),
+        viewport={"width": 1920, "height": 1080},  # Full HD resolution
+    )
     web_driver.new_page()
 
     yield web_driver

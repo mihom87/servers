@@ -8,7 +8,7 @@
             "module": "pytest",
             "args": [
                 "${file}",
-                "--base-url=https://www.servers.com/",
+                "--base-url=https://portal.servers.com",
                 "--browser=chromium",
                 "--no-headless",
                 "-v",
@@ -27,7 +27,7 @@
             "module": "pytest",
             "args": [
                 "${file}",
-                "--base-url=https://www.servers.com/",
+                "--base-url=https://portal.servers.com",
                 "--browser=chromium",
                 "-v",
                 "-s"

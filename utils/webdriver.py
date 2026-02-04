@@ -48,7 +48,7 @@ class WebDriver:
             browser_type: Browser type ('chromium', 'firefox', 'webkit')
         """
         self._driver = playwright_driver
-        self._base_url = base_url
+        self.base_url = base_url
         self._browser_type = browser_type
         self._browser: Optional[Browser] = None
         self._context: Optional[BrowserContext] = None
@@ -84,7 +84,7 @@ class WebDriver:
         if not self._page:
             raise RuntimeError("Page must be created first")
 
-        full_url = f"{self._base_url}{url}"
+        full_url = f"{self.base_url}{url}"
         return self._page.goto(full_url, **kwargs)
 
     @property

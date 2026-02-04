@@ -42,22 +42,28 @@ uv run playwright install chromium
 
 **⚠️ Без установки браузеров тесты не запустятся!**
 
+## Base URL
+
+**Текущий тестовый URL:** `https://portal.servers.com/`
+
+При переходе на base URL происходит автоматический редирект на `/login` (если не авторизован).
+
 ## Запуск тестов
 
 ### Из командной строки
 
 ```bash
 # Запуск всех тестов
-uv run pytest tests/ --base-url=https://www.servers.com/ --browser=chromium
+uv run pytest tests/ --base-url=https://portal.servers.com/ --browser=chromium
 
 # Запуск конкретного теста
-uv run pytest tests/test_login.py --base-url=https://www.servers.com/ --browser=chromium
+uv run pytest tests/test_login.py --base-url=https://portal.servers.com/ --browser=chromium
 
 # Запуск в visible mode (не headless)
-uv run pytest tests/test_login.py --base-url=https://www.servers.com/ --browser=chromium --no-headless
+uv run pytest tests/test_login.py --base-url=https://portal.servers.com/ --browser=chromium --no-headless
 
 # Запуск с подробным выводом
-uv run pytest tests/ --base-url=https://www.servers.com/ --browser=chromium -v -s
+uv run pytest tests/ --base-url=https://portal.servers.com/ --browser=chromium -v -s
 ```
 
 ### Из Cursor/VSCode
