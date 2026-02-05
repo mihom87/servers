@@ -27,6 +27,11 @@ class ContactPage(BasePage):
         return label.locator("xpath=..").locator("> div").nth(1)
 
     # Locators
+    @property
+    def edit_button(self):
+        return self.page.locator('div:has(h2:has-text("Contact info"))').get_by_role("button", name="Edit", exact=True)
+
+
     # Labels
     @property
     def first_name_label(self):
@@ -121,3 +126,7 @@ class ContactPage(BasePage):
         return (
             self._value_locator_near_label(self.comments_label)
         )
+    
+    # Actions
+    def click_edit_button(self):
+        self.edit_button.click()
