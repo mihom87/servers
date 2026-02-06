@@ -29,7 +29,6 @@ class SideMenu:
     def group_item(self, title: str) -> Locator:
         """
         Returns top-level LI that contains group title (e.g. 'Cloud Servers', 'Networks', etc.)
-        Use it in tests if you want.
         """
         return (
             self.root
@@ -51,7 +50,7 @@ class SideMenu:
     # ---------------------------
     @property
     def enterprise_bare_metal_group(self) -> Locator:
-        return self.group_item("Enterprise Bare Metal")
+        return self.root.locator("ul > li", has_text="Enterprise Bare Metal").first
 
     @property
     def cloud_servers_group(self) -> Locator:
