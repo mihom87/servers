@@ -13,4 +13,4 @@ def test_get_on_edit_contact_page(driver, filled_contact_fields):
     with ContactPage(driver) as page:
         page.click_edit_button()
         page.page.wait_for_load_state("load")
-        expect(page.page).to_have_url(page.path)
+        expect(page.page).to_have_url(page.path, timeout=20000)

@@ -98,7 +98,8 @@ class SideMenu:
 
     @property
     def monitoring_text_item(self) -> Locator:
-        return self.root.get_by_text("Monitoring", exact=True)
+        return self.root.get_by_text("Monitoring", exact=True).locator("xpath=ancestor::li[1]")
+        # return self.root.get_by_text("Monitoring", exact=True)
 
     @property
     def ssl_certificates_link(self) -> Locator:
@@ -218,3 +219,12 @@ class SideMenu:
     @property
     def reports_cloud_storage_link(self) -> Locator:
         return self.reports_group.get_by_role("link", name="Cloud Storage", exact=True)
+
+    # Monitoring
+    @property
+    def monitoring_healthchecks_link(self):
+        return self.monitoring_text_item.get_by_role("link", name="Healthchecks")
+
+    @property
+    def monitoring_notifications_link(self):
+        return self.monitoring_text_item.get_by_role("link", name="Notifications", exact=True)

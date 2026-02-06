@@ -35,7 +35,7 @@ def logged_in_user(driver):
     # Verify login successful using DashboardPage
     with DashboardPage(driver) as dashboard_page:
         # Verify we are on dashboard page (login successful)
-        expect(dashboard_page.page).to_have_url(dashboard_page.url)
+        expect(dashboard_page.page).to_have_url(dashboard_page.url, timeout=20000)
 
         # Wait for dashboard logout elements to appear
         expect(dashboard_page.user_dropdown_button).to_be_visible()

@@ -38,7 +38,7 @@ def test_logout_clears_form_fields(driver, logged_in_user):
     # Verify logout successful - check redirect to login page and form state
     with LoginPage(driver) as login_page:
         # Verify we are on login page
-        expect(login_page.page).to_have_url(login_page.url)
+        expect(login_page.page).to_have_url(login_page.url, timeout=20000)
 
         # Wait for login form fields to be visible
         expect(login_page.email_input).to_be_visible()

@@ -1,5 +1,4 @@
 from pages.dashboard_page import DashboardPage
-from pages.account_page import AccountPage
 from utils.custom_expect import expect
 
 
