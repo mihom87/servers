@@ -7,6 +7,9 @@ class LoginPage(BasePage):
     """
     Login page class for authentication functionality.
     """
+    action_timeout: int = 30000  # Timeout for actions (click, fill, etc.)
+    navigation_timeout: int = 30000  # Timeout for navigation (goto)
+    expect_timeout: int = 5000  # Timeout for expect assertions
 
     path = "/login"
 

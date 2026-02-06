@@ -1,6 +1,7 @@
 from playwright.sync_api import Page
 from typing import Optional
 from utils.webdriver import WebDriver
+from components.side_menu import SideMenu
 
 
 class BasePage:
@@ -38,6 +39,15 @@ class BasePage:
     def page(self) -> Optional[Page]:
         """Get current page from driver"""
         return self.driver.page
+    
+    @property
+    def side_menu(self) -> SideMenu:
+        """Get side menu from page"""
+        return SideMenu(
+            self.page.get_by_role("link", name="Servers.com").locator(
+                "xpath=ancestor::*[@role='region'][1]"
+            )
+        )
 
     def wait_for_load_state(self, state: str = "load", **kwargs):
         """Wait for page load state"""
@@ -63,6 +73,10 @@ class BasePage:
         if self.page:
             self.page.goto(self.url, **kwargs)
             self.wait_for_load_state()
+    @property
+    def not_found_text(self):
+        return self.page.get_by_text("The page wasn't found.", exact=False)
+
 
     def __enter__(self):
         """Enter context manager"""

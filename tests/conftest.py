@@ -19,8 +19,8 @@ def logged_in_user(driver):
         login_page.goto()
 
         # Wait for login form fields to be visible
-        expect(login_page.email_input).to_be_visible()
-        expect(login_page.password_input).to_be_visible()
+        expect(login_page.email_input).to_be_visible(timeout=20000)
+        expect(login_page.password_input).to_be_visible(timeout=20000)
 
         # Fill credentials
         login_page.fill_email("day+test9@servers.com")

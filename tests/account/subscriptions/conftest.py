@@ -59,6 +59,8 @@ def filled_contact_fields(driver, new_contact_page_opened, first_name, last_name
         # Wait for page to fully load after contact creation
         new_contact_page.page.wait_for_load_state("load")
 
+
+
 @pytest.fixture
 def first_name():
     return "Test"

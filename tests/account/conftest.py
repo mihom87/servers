@@ -1,7 +1,3 @@
-"""
-Fixtures for account tests.
-"""
-
 import pytest
 from pages.dashboard_page import DashboardPage
 from pages.account_page import AccountPage
