@@ -1,4 +1,5 @@
 from pages.contact_page import ContactPage
+from pages.contact_page_edit import ContactPageEdit
 from utils.custom_expect import expect
 
 
@@ -13,4 +14,6 @@ def test_get_on_edit_contact_page(driver, filled_contact_fields):
     with ContactPage(driver) as page:
         page.click_edit_button()
         page.page.wait_for_load_state("load")
+    with ContactPageEdit(driver) as page:
         expect(page.page).to_have_url(page.path, timeout=20000)
+        pass
