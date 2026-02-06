@@ -1,151 +1,174 @@
 # Servers.com Test Automation
 
-Автотесты для фронтенда servers.com, построенные на Playwright + pytest.
+Frontend test automation for **servers.com** built with **Playwright +
+pytest**.
 
-## Структура проекта
+------------------------------------------------------------------------
 
+## Project Structure
+
+    servers/
+    ├── pages/              # Page Object classes
+    │   ├── base_page.py
+    │   ├── main_page.py
+    │   ├── login_page.py
+    │   ├── dashboard_page.py
+    │   ├── account_page.py
+    │   ├── contact_page.py
+    │   ├── contact_page_edit.py
+    │   ├── new_contact_page.py
+    │   └── ...
+    ├── components/         # Reusable UI components
+    │   └── side_menu.py
+    ├── tests/              # Tests (one test = one file)
+    │   ├── login/
+    │   ├── logout/
+    │   ├── account/
+    │   ├── side_bar/       # Side bar sections (cloud servers, reports, etc.)
+    │   └── ...
+    ├── utils/
+    │   ├── webdriver.py    # Playwright wrapper
+    │   └── custom_expect.py # Custom expect assertions
+    ├── storage/            # Auto-generated storage (gitignored)
+    ├── conftest.py
+    ├── pyproject.toml
+    ├── .python-version     # Python 3.12
+    └── uv.lock
+
+------------------------------------------------------------------------
+
+## Local Setup (macOS only)
+
+Follow these steps to install all required tools and run the tests
+locally. This guide is for macOS only.
+
+### 1. Install Homebrew (if not installed)
+
+Open Terminal and run:
+
+``` bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
-servers/
-├── pages/              # Page Object классы
-│   ├── base_page.py   # Базовый класс для всех страниц
-│   └── main_page.py   # Главная страница
-├── tests/             # Тесты (один тест = один файл)
-│   └── test_login.py  # Тест логина
-├── utils/             # Вспомогательные утилиты
-│   ├── webdriver.py   # Обертка над Playwright
-│   └── custom_expect.py  # Кастомный expect для ассертов
-├── storage/           # Автоматически созданные storage файлы (в .gitignore)
-└── conftest.py        # Общие фикстуры pytest
+
+Verify:
+
+``` bash
+brew --version
 ```
 
-## Установка
+------------------------------------------------------------------------
 
-### 1. Установка uv
+### 2. Install Python
 
-Если `uv` еще не установлен, установите его:
+``` bash
+brew install python
+```
 
-```bash
-# macOS/Linux
+Verify:
+
+``` bash
+python3 --version
+```
+
+Python 3.12 is required.
+
+------------------------------------------------------------------------
+
+### 3. Install uv
+
+``` bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
+```
 
-📖 [Официальная документация uv](https://docs.astral.sh/uv/)
+Reload shell:
 
-### 2. Установка зависимостей и браузеров
+``` bash
+source ~/.zshrc
+```
 
-```bash
-# Установка зависимостей через uv
+Verify:
+
+``` bash
+uv --version
+```
+
+------------------------------------------------------------------------
+
+### 4. Clone repository
+
+``` bash
+git clone <repository_url>
+cd servers
+```
+
+Make sure you are in the **project root directory**.
+
+------------------------------------------------------------------------
+
+### 5. Install dependencies
+
+``` bash
 uv sync
+```
 
-# ВАЖНО! Установка браузеров Playwright (обязательный шаг!)
+------------------------------------------------------------------------
+
+### 6. Install Playwright browsers
+
+``` bash
 uv run playwright install chromium
 ```
 
-**⚠️ Без установки браузеров тесты не запустятся!**
+------------------------------------------------------------------------
 
 ## Base URL
 
-**Текущий тестовый URL:** `https://portal.servers.com/`
+    https://portal.servers.com
 
-При переходе на base URL происходит автоматический редирект на `/login` (если не авторизован).
+------------------------------------------------------------------------
 
-## Запуск тестов
+## Running Tests
 
-### Из командной строки
+Parallel execution (e.g. pytest-xdist) is not supported.
 
-```bash
-# Запуск всех тестов
-uv run pytest tests/ --base-url=https://portal.servers.com/ --browser=chromium
+### Run all tests (visible mode)
 
-# Запуск конкретного теста
-uv run pytest tests/test_login.py --base-url=https://portal.servers.com/ --browser=chromium
+From the project root directory:
 
-# Запуск в visible mode (не headless)
-uv run pytest tests/test_login.py --base-url=https://portal.servers.com/ --browser=chromium --no-headless
-
-# Запуск с подробным выводом
-uv run pytest tests/ --base-url=https://portal.servers.com/ --browser=chromium -v -s
+``` bash
+uv run pytest --base-url https://portal.servers.com --browser chromium --no-headless
 ```
 
-### Из Cursor/VSCode
+------------------------------------------------------------------------
 
-1. Открыть нужный тест-файл (например, `tests/test_login.py`)
-2. Нажать `F5` или `Run > Start Debugging`
-3. Выбрать конфигурацию:
-   - **Pytest: Run Current File** - запуск в visible mode
-   - **Pytest: Run Current File (Headless)** - запуск в headless mode
+### Run all tests (headless mode)
 
-## Правила проекта
+``` bash
+uv run pytest --base-url https://portal.servers.com --browser chromium
+```
 
-- **Один тест = один файл**: имя теста идентично имени файла
-  - Файл: `test_login.py` → Функция: `test_login()`
-- **Локаторы через @property**: ленивая инициализация для гибкости
-- **Page Object Pattern**: все взаимодействия со страницей через методы Page классов
-- **Автоматический Storage**: cookie consent автоматически принимается при первом запуске, storage переиспользуется
+------------------------------------------------------------------------
 
-## Управление Storage
+### Run a specific test
 
-### Автоматическое создание
+``` bash
+uv run pytest tests/login/test_successful_login_with_valid_credentials.py --base-url https://portal.servers.com --browser chromium
+```
 
-Storage создается **автоматически внутри фикстуры `driver`** при первом запуске. Никаких дополнительных действий не требуется!
+------------------------------------------------------------------------
 
-**Как это работает:**
-1. Фикстура `driver` проверяет наличие `storage/auth_storage.json`
-2. Если файла нет - создает временный context, принимает cookies, сохраняет storage
-3. Все последующие тесты используют готовый storage (popup не появляется)
+## Project Rules
 
-**Безопасно для параллельного запуска**: используется `filelock` для синхронизации между pytest-xdist воркерами.
+-   One test = one file
+-   Page Object Pattern
+-   Locators via @property
+-   Automatic storage handling
 
-### Пересоздание Storage
+------------------------------------------------------------------------
 
-Если нужно пересоздать storage (например, изменилась логика cookie popup):
+## Storage Reset
 
-```bash
-# Удалить storage
+``` bash
 rm -rf storage/
-
-# При следующем запуске тестов storage создастся автоматически
-uv run pytest tests/test_login.py --base-url=https://www.servers.com/ --browser=chromium
-```
-
-## Параметры pytest
-
-### Обязательные параметры
-
-- `--base-url`: Base URL тестируемого приложения
-- `--browser`: Тип браузера (сейчас поддерживается только `chromium`)
-
-### Опциональные параметры
-
-- `--no-headless`: Запуск браузера в visible mode (по умолчанию headless)
-- `-v`: Подробный вывод
-- `-s`: Показывать print() в консоли
-- `-k <pattern>`: Запуск тестов по pattern (например, `-k login`)
-- `-m <marker>`: Запуск тестов по маркеру (например, `-m smoke`)
-
-## Маркеры pytest
-
-- `@pytest.mark.smoke` - Smoke тесты
-- `@pytest.mark.regression` - Regression тесты
-- `@pytest.mark.login` - Тесты логина
-
-## Пример использования
-
-```python
-from pages.main_page import MainPage
-from utils.custom_expect import expect
-
-
-def test_example(driver):
-    # Создать Page Object
-    main_page = MainPage(driver)
-    
-    # Перейти на страницу
-    main_page.goto()
-    
-    # Проверить элементы
-    expect(main_page.logo).to_be_visible()
-    expect(main_page.main_heading).to_have_text("Expected text")
-    
-    # Вызвать методы
-    main_page.click_customer_portal()
+uv run pytest --base-url https://portal.servers.com --browser chromium
 ```
