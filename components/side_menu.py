@@ -54,46 +54,47 @@ class SideMenu:
 
     @property
     def cloud_servers_group(self) -> Locator:
-        return self.group_item("Cloud Servers")
+        return self.root.locator("ul > li", has_text="Cloud Servers").first
 
     @property
     def networks_group(self) -> Locator:
-        return self.group_item("Networks")
+        return self.root.locator("ul > li", has_text="Networks").first
 
     @property
     def identity_and_access_group(self) -> Locator:
-        return self.group_item("Identity and Access")
+        return self.root.locator("ul > li", has_text="Identity and Access").first
+
 
     @property
     def billing_group(self) -> Locator:
-        return self.group_item("Billing")
+        return self.root.locator("ul > li", has_text="Billing").first
 
     @property
     def reports_group(self) -> Locator:
-        return self.group_item("Reports")
+        return self.root.locator("ul > li", has_text="Reports").first
 
     # ---------------------------
     # Single-link top-level items
     # ---------------------------
     @property
     def cloud_storage_link(self) -> Locator:
-        return self.link_by_text("Cloud Storage")
+        return self.root.get_by_role("link", name="Cloud Storage")
 
     @property
     def managed_kubernetes_link(self) -> Locator:
-        return self.link_by_text("Managed Kubernetes")
+        return self.root.get_by_role("link", name="Managed Kubernetes")
 
     @property
     def load_balancers_link(self) -> Locator:
-        return self.link_by_text("Load Balancers")
+        return self.root.get_by_role("link", name="Load Balancers")
 
     @property
     def firewalls_link(self) -> Locator:
-        return self.link_by_text("Firewalls")
+        return self.root.get_by_role("link", name="Firewalls")
 
     @property
     def private_racks_link(self) -> Locator:
-        return self.link_by_text("Private Racks")
+        return self.root.get_by_role("link", name="Private Racks")
 
     @property
     def monitoring_text_item(self) -> Locator:
@@ -101,15 +102,15 @@ class SideMenu:
 
     @property
     def ssl_certificates_link(self) -> Locator:
-        return self.link_by_text("SSL certificates")
+        return self.root.get_by_role("link", name="SSL certificates")
 
     @property
     def account_settings_link(self) -> Locator:
-        return self.link_by_text("Account settings")
+        return self.root.get_by_role("link", name="Account settings")
 
     @property
     def requests_link(self) -> Locator:
-        return self.link_by_text("Requests")
+        return self.root.get_by_role("link", name="Requests")
 
     # ---------------------------
     # Submenu links (explicit properties)
