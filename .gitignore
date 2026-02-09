@@ -55,8 +55,7 @@ storage/*
 *.ipr
 
 # IDE - VSCode
-.vscode/*
-!.vscode/launch.json
+.vscode/
 *.code-workspace
 
 # Editor backup files
